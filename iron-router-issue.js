@@ -1,5 +1,16 @@
 Users = new Meteor.Collection('users');
 
+// Router.configure({
+//   loadingTemplate: 'loadingTemplate',
+//   onBeforeAction: 'loading'
+// })
+
+Router.onBeforeAction(function(pause){
+  if(!this.ready()){
+    // this.render('loadingTemplate');
+    pause();
+  }
+})
 
 Router.map(function(){
   this.route('home',{
@@ -18,14 +29,18 @@ Router.map(function(){
 
 if (Meteor.isClient) {
   Template.hello.rendered = function(){
-    console.log('template hello rendered');
+    console.log('template hello ==== rendered');
     var users1 = Users.find().fetch();
     console.log(users1);
     Meteor.defer(function(){
-      console.log('meteor defer');
+      console.log('template hello ==== meteor defer');
       var users2 = Users.find().fetch();
       console.log(users2);
     })
+  }
+
+  Template.loadingTemplate.rendered = function(){
+    console.log('template loading ==== rendered');
   }
 }
 
